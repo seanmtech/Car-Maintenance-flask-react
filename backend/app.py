@@ -40,6 +40,24 @@ def get_cars():
     results = carQuerySet_Schema.dump(allCarsInDB)
     return jsonify(results)
 
+@app.route('/get/<id>/', methods = ['GET'])
+def get_car_by_id(id):
+    car = CarsTable.query.get(id)
+    return car_schema.jsonify(car)
+
+@app.route('/update/<id>/', methods = ['POST'])
+def update_car_by_id(id):
+    car = CarsTable.query.get(id)
+    newCarModel = request.json['carModel']
+    newMileage = request.json['mileage']
+
+    car.carModel = newCarModel
+    car.mileage = newMileage
+
+    db.session.commit()
+    
+    return car_schema.jsonify(car)
+
 
 @app.route('/add', methods = ['POST'])
 def add_car():
@@ -50,6 +68,14 @@ def add_car():
     db.session.add(carListForDB)
     db.session.commit()
     return car_schema.jsonify(carListForDB)
+
+@app.route('/delete/<id>/', methods = ['DELETE'])
+def car_delete(id):
+    car = CarsTable.query.get(id)
+    db.session.delete(car)
+    db.session.commit()
+
+    return car_schema.jsonify(car)
 
 
 
