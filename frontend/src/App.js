@@ -25,11 +25,22 @@ function App() {
     setEditedCar(car)
   }
 
+  const updatedData = (carModel) => {
+    const new_carModel = cars.map(my_car => {
+      if(my_car.carID === carModel.carID){
+        return carModel
+      }
+      else {
+        return my_car
+      }
+    })
+  }
+
   return (
     <div className="App">
       <h1>Flask and ReactJS Car Maintenance App</h1>
         <CarList cars = {cars} editCar = {editCar}/>
-        <Form car = {editedCar}/>
+        {editedCar ? <Form car = {editedCar}/> : null}
     </div>
   );
 }
