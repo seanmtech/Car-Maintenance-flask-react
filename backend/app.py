@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from dotenv import load_dotenv
 from flask_cors import CORS
+from flask_mail import Mail, Message
 
 load_dotenv()
 
@@ -12,12 +13,19 @@ db_password = os.environ.get('DB_PASSWORD')
 
 app = Flask(__name__)
 CORS(app)
-
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = os.environ.get('GMAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.environ.get('GOOGLE_APP_PASS')
+app.config['MAIL_DEFAULT_SENDER'] = (os.environ.get('SENDER_NAME'), os.environ.get('DEFAULT_SENDER_EMAIL'))
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://root:{db_password}@localhost/flaskCarDB'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 marsh = Marshmallow(app)
+mail = Mail(app)
 
 class CarsTable(db.Model):
     carID = db.Column(db.Integer, primary_key=True)
@@ -79,7 +87,14 @@ def car_delete(id):
 
     return car_schema.jsonify(car)
 
-
+@app.route('/sendEmail', methods = ['POST'])
+def send_email():
+    emailAddress = request.json.get('email')
+    print(f"Email: {emailAddress}")
+    msg = Message('Hello', recipients=[emailAddress])
+    msg.body = 'This is a test email.'
+    mail.send(msg)
+    return 'Email sent!'
 
 if __name__=="__main__":
     app.run(debug=True)
