@@ -57,10 +57,15 @@ def get_car_by_id(id):
 
 @app.route('/update/<id>/', methods = ['POST'])
 def update_car_by_id(id):
-    car = CarsTable.query.get(id)
+    
+    print("Request JSON: ", request.json)
     newCarModel = request.json['carModel']
     newMileage = request.json['mileage']
 
+    if newCarModel is None or newMileage is None:
+        return jsonify({'error': 'missing carModel or mileage'}), 400
+
+    car = CarsTable.query.get(id)
     car.carModel = newCarModel
     car.mileage = newMileage
 
@@ -92,7 +97,7 @@ def send_email():
     emailAddress = request.json.get('email')
     print(f"Email: {emailAddress}")
     msg = Message('Hello', recipients=[emailAddress])
-    msg.body = 'This is a test email.'
+    msg.body = 'Time for an Oil Change, you drove another 5k miles!'
     mail.send(msg)
     return 'Email sent!'
 

@@ -34,6 +34,7 @@ function App() {
         return my_car
       }
     })
+    setCars(new_carModel);
   }
 
   return (

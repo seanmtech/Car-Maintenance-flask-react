@@ -1,13 +1,17 @@
 
 export default class APIService {
 
-    static updateCar(carID, carModel){
+    static updateCar(carID, carModel, mileage){
+        const carData = {
+            carModel: carModel,
+            mileage: mileage,
+        };
         return fetch(`http://127.0.0.1:5000/update/${carID}/`, {
             'method':'POST',
             headers: {
               'Content-Type':'application/json'
             },
-            body: JSON.stringify(carModel)
+            body: JSON.stringify(carData)
           })
           .then(res => res.json())
     }
