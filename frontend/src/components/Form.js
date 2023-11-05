@@ -10,14 +10,6 @@ function Form(props) {
     const updateCar = () => {
         const previousMileage = props.car.mileage;
         const numMileage = Number(mileage);
-        
-        // console.log("previousMileage var: ", previousMileage)
-        // console.log("mileage prop/var: ", mileage)
-        // console.log("numMileage prop/var: ", numMileage)
-        // console.log('mileage type: ', typeof mileage);
-        // console.log('numMileage type: ', typeof numMileage);
-        // console.log('previousMileage type: ', typeof previousMileage);
-        // console.log('mileage - previousMileage: ', mileage - previousMileage);
 
         return APIService.updateCar(props.car.carID, carModel, mileage)  
           .then(res => {
@@ -30,13 +22,6 @@ function Form(props) {
             console.log('Error updating car or sending email', error);
           });
       };
-      
-    // OLD (but was working)
-    // const sendEmail = () => {
-    //     APIService.sendEmail(email)
-    //       .then(res => console.log('Email sent!'))
-    //       .catch(error => console.log(error));
-    // };
 
     const sendEmail = () => {
         return new Promise((resolve, reject) => {
